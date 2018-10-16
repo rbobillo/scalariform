@@ -59,6 +59,16 @@ class FirstArgumentOnNewlineFormatterTest extends AbstractExpressionFormatterTes
   implicit val formattingPreferences =
     FormattingPreferences.setPreference(FirstArgumentOnNewline, Preserve).setPreference(AlignArguments, true)
 
+  // Parameters on a single line should not align to other parameters
+  "foo(a = 1, bb = 2, ccc = 3)" ==>
+  "foo(a = 1, bb = 2, ccc = 3)" // a: bad align, bb: ok, ccc: ok
+  "foo(aa = 2, bbb = 3, c = 1)" ==>
+  "foo(aa = 2, bbb = 3, c = 1)" // aa: bad align, bbb: ok, c: ok
+  "foo(aa = 2, b = 1, ccc = 3)" ==>
+  "foo(aa = 2, b = 1, ccc = 3)" // aa: bad align, b: ok, ccc: ok
+  "foo(aaa = 3, b = 1, cc = 2)" ==>
+  "foo(aaa = 3, b = 1, cc = 2)" // aaa: ok, b: ok, cc: ok
+
   // Parameters left on the first line should have other parameters aligned to them.
   """foo(a  = 1,
     |    bb =  2,
